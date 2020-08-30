@@ -1,0 +1,2 @@
+webpack의 loader을 사용하면 sass를 css 코드로 변환하거나
+ES6코드를 ES5 JavaScript로 변환 해 줌
