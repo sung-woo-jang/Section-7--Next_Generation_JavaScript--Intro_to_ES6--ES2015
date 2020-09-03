@@ -11,9 +11,23 @@ export default class Recipe {
             const res = await axios(
                 `https://forkify-api.herokuapp.com/api/get?rId=${this.id}`
             );
+
+            this.title = res.data.recipe.title;
+            this.author = res.data.recipe.publisher;
+            this.img = res.data.recipe.image_url;
+            this.url = res.data.recipe.source_url;
+            this.ingredients = res.data.recipe.ingredients;
         } catch (error) {
-            console.log(error);
+            console.log(new Error(`씨발씨발씨바아아알${error}`));
             alert('Something went wrong :(');
         }
+    }
+    calcTime() {
+        const numIng = this.ingredients.length;
+        const periods = Math.ceil(numIng / 3);
+        this.time = peridos * 15;
+    }
+    calcServings() {
+        this.servings = 4;
     }
 }
