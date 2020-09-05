@@ -28,13 +28,17 @@ const controlSearch = async () => {
         searchView.clearInput(); // 검색창 지우가
         searchView.clearResults(); // 새로 검색하면 그 전 Data 삭제
         renderLoader(elements.searchRes); //로딩중인 이미지 띄우기
+        try {
+            // 4. Search for recipes
+            await state.search.getResults();
 
-        // 4. Search for recipes
-        await state.search.getResults();
-
-        // 5. Render results on UI
-        clearLoader();
-        searchView.renderResults(state.search.result);
+            // 5. Render results on UI
+            clearLoader();
+            searchView.renderResults(state.search.result);
+        } catch (err) {
+            alert('Something wrong with the search');
+            clearLoader();
+        }
     }
 };
 
@@ -56,6 +60,36 @@ elements.searchResPages.addEventListener('click', (e) => {
  * RECIPE CONTROLLER
  */
 
-const r = new Recipe(54454);
-r.getRecipe();
-console.log(r);
+const controlRecipe = async () => {
+    // Get ID from url
+    const id = window.location.hash.replace('#', '');
+    // window.location : 그냥 URL -> .hash : 그냥 #
+    console.log(id);
+
+    if (id) {
+        // Prepare UI for changes
+
+        // Create new recipe object
+        state.recipe = new Recipe(id);
+
+        try {
+            // Get recipe data and parse ingredints
+            await state.recipe.getRecipe();
+            console.log(state.recipe.ingredients);
+            state.recipe.parseIngredients();
+
+            // Calculate servings and time
+            state.recipe.calcTime();
+            state.recipe.calcServings();
+
+            // Render recipe
+            console.log(state.recipe);
+        } catch (err) {
+            alert('조리법에 오류가 있습니다.');
+        }
+    }
+};
+
+['hashchange', 'load'].forEach((event) =>
+    window.addEventListener(event, controlRecipe)
+);
