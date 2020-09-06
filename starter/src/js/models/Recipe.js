@@ -52,6 +52,8 @@ export default class Recipe {
             'pound',
         ];
 
+        const units = [...unitsShort, 'kg', 'g'];
+
         const newIngredients = this.ingredients.map((el) => {
             // 1. UniForm units
             let ingredient = el.toLowerCase();
@@ -65,9 +67,7 @@ export default class Recipe {
             // 3. Parse ingredients into count, unit and ingredient
             const arrIng = ingredient.split(' ');
             // 빈 공간이 있을 때마다 거기까지 잘라서 새로운 배열로 반환
-            const unitIndex = arrIng.findIndex((el2) =>
-                unitsShort.includes(el2)
-            );
+            const unitIndex = arrIng.findIndex((el2) => units.includes(el2));
 
             let objIng;
             if (unitIndex > -1) {
